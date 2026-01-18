@@ -2,10 +2,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>AR Mô Phỏng Thực Tế Ảo</title>
+    <title>AR/VR Mô Phỏng Thực Tế</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 </head>
 <body>
 
@@ -35,6 +37,32 @@
 <footer class="main-footer">
     <p id="footer-text"></p>
 </footer>
+
+<div id="vr-overlay">
+    <button class="close-vr" onclick="closeVR()">✕ Đóng VR</button>
+    
+    <div class="vr-eye">
+        <model-viewer id="vr-model-left" 
+                      src="" 
+                      auto-rotate 
+                      camera-controls 
+                      shadow-intensity="1"
+                      disable-zoom>
+        </model-viewer>
+        <p id="vr-text-left"></p>
+    </div>
+
+    <div class="vr-eye">
+        <model-viewer id="vr-model-right" 
+                      src="" 
+                      auto-rotate 
+                      camera-controls 
+                      shadow-intensity="1" 
+                      disable-zoom>
+        </model-viewer>
+        <p id="vr-text-right"></p>
+    </div>
+</div>
 
 <script src="script.js"></script>
 </body>
