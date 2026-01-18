@@ -1,0 +1,5 @@
+- [x] Update script.js: Add all new models to the models object
+- [x] Update script.js: Add loadPreview calls for all new models in DOMContentLoaded
+- [x] Update index.html: Add all new ar-card divs to the ar-list
+- [x] Fix file name mapping for GLB and USDZ files in script.js
+- [x] Add _headers file for correct MIME types on GitHub Pages

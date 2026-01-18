@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>AR Mô Phỏng Thực Tế Ảo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="top-bar">
+        <div class="lang-controls">
+            <button onclick="setLanguage('vi')" id="btn-vi" class="lang-node active">
+                <img src="https://cdn-icons-png.flaticon.com/128/323/323319.png" alt="VN"> VI
+            </button>
+            <button onclick="setLanguage('en')" id="btn-en" class="lang-node">
+                <img src="https://cdn-icons-png.flaticon.com/128/323/323329.png" alt="EN"> EN
+            </button>
+        </div>
+        <div class="theme-node" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    </div>
+
+    <h1 id="main-title">AR Mô Phỏng Thực Tế Ảo</h1>
+    <p id="sub-title">Khám phá tri thức qua không gian 3D trực quan</p>
+
+    <div class="search-wrapper">
+        <input type="text" id="search-input" placeholder="Tìm kiếm mô hình..." onkeyup="filterModels()">
+    </div>
+</header>
+
+<main class="content-grid" id="ar-container"></main>
+
+<footer class="main-footer">
+    <p id="footer-text"></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
