@@ -26,8 +26,8 @@ const models = {
 };
 
 const uiText = {
-    vi: { title: "AR Mô Phỏng Thực Tế Ảo", sub: "Khám phá tri thức qua không gian 3D trực quan", search: "Tìm kiếm mô hình...", btn: "Xem AR", footer: "© 2026 • AR Learning • Ngọc Tiến & Đăng Khoa", alert: "Vui lòng dùng thiết bị di động để xem AR!" },
-    en: { title: "AR Reality Simulation", sub: "Explore knowledge via intuitive 3D space", search: "Search models...", btn: "View AR", footer: "© 2026 • AR Learning • Ngoc Tien & Dang Khoa", alert: "Please use a mobile device to view AR!" }
+    vi: { title: "AR Mô Phỏng Thực Tế Ảo", sub: "Khám phá tri thức qua không gian 3D trực quan", search: "Tìm kiếm mô hình...", btn: "Xem AR", btnVR: "Xem VR", footer: "© 2026 • AR Learning • Ngọc Tiến & Đăng Khoa", alert: "Vui lòng dùng thiết bị di động để xem AR!" },
+    en: { title: "AR Reality Simulation", sub: "Explore knowledge via intuitive 3D space", search: "Search models...", btn: "View AR", btnVR: "View VR", footer: "© 2026 • AR Learning • Ngoc Tien & Dang Khoa", alert: "Please use a mobile device to view AR!" }
 };
 
 let state = { lang: localStorage.getItem('lang') || 'vi', theme: localStorage.getItem('theme') || 'light' };
@@ -44,7 +44,10 @@ function initApp() {
             </div>
             <div class="card-body">
                 <h3 id="h3-${key}">${models[key][state.lang]}</h3>
-                <button class="btn-ar" onclick="openAR('${key}')" id="btn-${key}">${uiText[state.lang].btn}</button>
+                <div class="btn-container">
+                    <button class="btn-ar" onclick="openAR('${key}')" id="btn-ar-${key}">${uiText[state.lang].btn}</button>
+                    <button class="btn-vr" onclick="openVR('${key}')" id="btn-vr-${key}">${uiText[state.lang].btnVR}</button>
+                </div>
             </div>
         </div>
     `).join('');
@@ -69,9 +72,11 @@ function updateUI() {
     
     Object.keys(models).forEach(key => {
         const h3 = document.getElementById(`h3-${key}`);
-        const btn = document.getElementById(`btn-${key}`);
+        const btnAr = document.getElementById(`btn-ar-${key}`);
+        const btnVr = document.getElementById(`btn-vr-${key}`);
         if(h3) h3.innerText = models[key][lang];
-        if(btn) btn.innerText = uiText[lang].btn;
+        if(btnAr) btnAr.innerText = uiText[lang].btn;
+        if(btnVr) btnVr.innerText = uiText[lang].btnVR;
     });
     
     document.getElementById('btn-vi').classList.toggle('active', lang === 'vi');
@@ -115,6 +120,58 @@ function openAR(name) {
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${location.origin}/${fileName}.glb&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;end;`;
     } else {
         alert(uiText[state.lang].alert);
+    }
+}
+
+/* --- Xử lý chức năng VR dùng file .GLB --- */
+async function openVR(key) {
+    const model = models[key];
+    const overlay = document.getElementById('vr-overlay');
+    
+    // Tạo đường dẫn file GLB (giả sử file nằm cùng cấp thư mục)
+    // Nếu bạn để file trong thư mục 'models', hãy sửa thành: `models/${model.fileName}.glb`
+    const glbPath = `${model.fileName}.glb`;
+
+    // Lấy thẻ model-viewer
+    const leftEye = document.getElementById('vr-model-left');
+    const rightEye = document.getElementById('vr-model-right');
+
+    // Gán đường dẫn file 3D
+    leftEye.src = glbPath;
+    rightEye.src = glbPath;
+
+    // Gán text mô tả
+    document.getElementById('vr-text-left').innerText = model[state.lang];
+    document.getElementById('vr-text-right').innerText = model[state.lang];
+
+    overlay.style.display = 'flex';
+
+    // Xử lý Fullscreen và xoay ngang
+    try {
+        if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+        }
+        if (screen.orientation && screen.orientation.lock) {
+            await screen.orientation.lock('landscape');
+        }
+    } catch (err) {
+        console.log("Lỗi khi xoay hoặc fullscreen: ", err);
+    }
+}
+
+function closeVR() {
+    const overlay = document.getElementById('vr-overlay');
+    overlay.style.display = 'none';
+
+    // Dừng model-viewer bằng cách xóa src để tiết kiệm tài nguyên
+    document.getElementById('vr-model-left').src = "";
+    document.getElementById('vr-model-right').src = "";
+
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    }
+    if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
     }
 }
 
